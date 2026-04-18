@@ -55,10 +55,42 @@ fclean: clean
 
 re: fclean all
 
+# Run all tests
 test: tests/test_input tests/test_map tests/test_color
-	./tests/test_input
-	./tests/test_map
-	./tests/test_color
+	@echo ""
+	@echo "========================================"
+	@echo "Running all tests..."
+	@echo "========================================"
+	@echo ""
+	@./tests/test_input
+	@./tests/test_map
+	@./tests/test_color
+	@echo ""
+	@echo "To run specific tests:"
+	@echo "  make test-input    # Input validation"
+	@echo "  make test-map     # Map parsing"
+	@echo "  make test-color  # Color conversion"
+	@echo ""
+
+# Run individual test categories
+test-input: tests/test_input
+	@./tests/test_input
+
+test-map: tests/test_map
+	@./tests/test_map
+
+test-color: tests/test_color
+	@./tests/test_color
+
+# List available tests
+test-list:
+	@echo "Available tests:"
+	@echo "  input   - Input validation (22 tests)"
+	@echo "  map     - Map parsing (20 tests)"
+	@echo "  color   - Color conversion (12 tests)"
+	@echo ""
+	@echo "Run: make test        # Run all"
+	@echo "Run: make test-input # Run one category"
 
 tests/test_input: tests/test_input.c
 	cc -Wall -Wextra -Werror tests/test_input.c -o tests/test_input
