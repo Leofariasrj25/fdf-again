@@ -56,7 +56,7 @@ fclean: clean
 re: fclean all
 
 # Run all tests
-test: tests/test_input tests/test_map tests/test_color tests/test_math
+test: tests/test_input tests/test_map tests/test_color tests/test_math tests/test_draw
 	@echo ""
 	@echo "========================================"
 	@echo "Running all tests..."
@@ -66,12 +66,14 @@ test: tests/test_input tests/test_map tests/test_color tests/test_math
 	@./tests/test_map
 	@./tests/test_color
 	@./tests/test_math
+	@./tests/test_draw
 	@echo ""
 	@echo "To run specific tests:"
 	@echo "  make test-input    # Input validation"
 	@echo "  make test-map     # Map parsing"
 	@echo "  make test-color  # Color conversion"
 	@echo "  make test-math   # Math utilities"
+	@echo "  make test-draw   # Drawing algorithm"
 	@echo ""
 
 # Run individual test categories
@@ -87,6 +89,9 @@ test-color: tests/test_color
 test-math: tests/test_math
 	@./tests/test_math
 
+test-draw: tests/test_draw
+	@./tests/test_draw
+
 # List available tests
 test-list:
 	@echo "Available tests:"
@@ -94,9 +99,10 @@ test-list:
 	@echo "  map     - Map parsing (20 tests)"
 	@echo "  color   - Color conversion (12 tests)"
 	@echo "  math    - Math utilities (36 tests)"
+	@echo "  draw    - Drawing algorithm (24 tests)"
 	@echo ""
-	@echo "Run: make test        # Run all (90 tests)"
-	@echo "Run: make test-math  # Run math only"
+	@echo "Run: make test       # Run all (114 tests)"
+	@echo "Run: make test-draw  # Run draw only"
 
 tests/test_input: tests/test_input.c
 	cc -Wall -Wextra -Werror tests/test_input.c -o tests/test_input
@@ -109,3 +115,6 @@ tests/test_color: tests/test_color.c
 
 tests/test_math: tests/test_math.c
 	cc -Wall -Wextra -Werror tests/test_math.c -o tests/test_math -lm
+
+tests/test_draw: tests/test_draw.c
+	cc -Wall -Wextra -Werror tests/test_draw.c -o tests/test_draw -lm
