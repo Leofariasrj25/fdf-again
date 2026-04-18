@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   events2_bonus.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lfarias- <lfarias-@student.42.rio>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*   events2_bonus.c                                    :::      ::::::::   */
+/*                                                    :::      ::::::::   */
+/*   By: lfarias- <lfarias-@student.42.rio>         :::   :::   :::        */
+/*                                                https://github.com/lfariasr */
+/*                                                    https://42.rio         */
 /*   Created: 2022/10/31 22:09:30 by lfarias-          #+#    #+#             */
-/*   Updated: 2022/11/03 18:01:26 by lfarias-         ###   ########.fr       */
+/*   Updated: 2026/04/17 by lfarias-                 ###    ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf_bonus.h"
 
-int	close_button(void *param)
+void	close_handler(void *param)
 {
 	t_app	*app_data;
 
@@ -21,7 +22,7 @@ int	close_button(void *param)
 	exit(0);
 }
 
-int	change_palette(int keycode, t_app *app_data)
+void	change_palette(int keycode, t_app *app_data)
 {
 	if (keycode == PALETTE_1)
 	{
@@ -43,5 +44,4 @@ int	change_palette(int keycode, t_app *app_data)
 	}
 	app_data->color_palette = 1;
 	app_data->map_draw = 0;
-	return (0);
 }

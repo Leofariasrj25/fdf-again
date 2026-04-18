@@ -1,18 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fdf.h                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lfarias- <lfarias-@student.42.rio>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*   fdf.h                                              :::      ::::::::   */
+/*                                                    :::      ::::::::   */
+/*   By: lfarias- <lfarias-@student.42.rio>         :::   :::   :::        */
+/*                                                https://github.com/lfariasr */
+/*                                                    https://42.rio         */
 /*   Created: 2022/09/23 19:05:59 by lfarias-          #+#    #+#             */
-/*   Updated: 2022/11/03 19:12:20 by lfarias-         ###   ########.fr       */
+/*   Updated: 2026/04/17 by lfarias-                 ###    ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
+
 # include "libft/libft.h"
+# include "MLX42/MLX42.h"
 
 # define SCREEN_W 1920
 # define SCREEN_L 1080
@@ -23,21 +26,13 @@
 # define MENU_VALUE_COLOR 0x00FF6188
 # define CANVAS_MARGIN 30
 
-// window management define
-# define KEY_PRESS 2
-# define CLOSE_WIN 17
-
 // options bindings
-# define ESC_KEY 53
-# define F_KEY 3
-
-// J/K -/+ z_scale
-# define K_KEY 40
-# define J_KEY 38
-
-// H/L -/+ xy_scale
-# define H_KEY 4
-# define L_KEY 37
+# define ESC_KEY MLX_KEY_ESCAPE
+# define F_KEY MLX_KEY_F
+# define K_KEY MLX_KEY_K
+# define J_KEY MLX_KEY_J
+# define H_KEY MLX_KEY_H
+# define L_KEY MLX_KEY_L
 
 typedef struct s_coord
 {
@@ -61,25 +56,16 @@ typedef struct s_map
 	struct s_coord	*points;
 }	t_map;
 
-typedef struct s_img_data
-{
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}	t_frame;
-
 typedef struct s_app_info
 {
-	void	*mlx;
-	void	*window;
-	t_frame	*bitmap;
-	t_coord	*projection;
-	t_map	*map;
-	int		win_close;
-	int		map_draw;
-	int		fit;
+	mlx_t			*mlx;
+	mlx_image_t		*img;
+	mlx_image_t		*str_img[20];
+	int				str_count;
+	t_coord			*projection;
+	t_map			*map;
+	int				map_draw;
+	int				fit;
 }	t_app;
 
 // app
@@ -92,9 +78,9 @@ double	get_scale(int map_width, int map_length, int argc, char **argv);
 void	all_you_need_is_kill(t_app *app_data);
 
 // events & controls
-int		render_scene(t_app *app_data);
-int		key_press(int keycode, void *param);
-int		close_button(void *param);
+void	render_loop(void *param);
+void	key_handler(mlx_key_data_t keydata, void *param);
+void	close_handler(void *param);
 
 // map
 t_map	*map_get(char *map_name);
@@ -104,17 +90,15 @@ int		check_line_format(char **fields);
 void	erase_lines(t_list *map_line);
 
 //draw
-void	mlx_pixel_put_v2(t_frame *frame, int x, int y, int color);
-void	draw_line(t_frame *img, t_coord *point0, t_coord *point1, int color);
+void	draw_line(mlx_image_t *img, t_coord *point0, t_coord *point1, uint32_t color);
 void	draw_map(t_app *data, t_coord *projection);
 void	draw_menu(t_app *data);
 void	render_img(t_app *data, t_coord *projection);
 void	fit_img(t_app *data, t_coord *projection);
-void	clear_img(t_app *data, t_coord *projection);
+void	clear_img(mlx_image_t *img);
+void	display_img(t_app *app_data);
 int		out_of_screen(t_coord *p0, t_coord *p1);
 int		on_screen(double x, double y);
-void	free_img_buffer(t_app *app_data, t_frame *screen);
-void	display_img(t_app *app_data);
 
 // math
 double	dg2_rad(double angle);
@@ -129,7 +113,7 @@ void	z_scale(t_coord *projection, double z_scale, int size);
 //utils
 void	write_map_info(t_app *data);
 void	write_controls(t_app *data);
-void	print_str(t_app *data, t_coord *point, int color, char *value);
+void	print_str(t_app *data, double x, double y, int color, char *value);
 void	free_2d_array(void **matrix);
 t_coord	*copy_points(t_coord *dst, t_coord *src, int size);
 int		atohex(char *str);

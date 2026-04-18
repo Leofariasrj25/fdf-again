@@ -1,71 +1,52 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: lfarias- <lfarias-@student.42.rio>         +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/09/14 14:03:09 by lfarias-          #+#    #+#              #
-#    Updated: 2022/11/05 14:57:36 by lfarias-         ###   ########.fr        #
+#    Makefile                                           :::      :::    :::     #
+#                                                     +:+  +:+       ++       #
+#    By: lfarias- <lfarias-@student.42.rio>         #+#    #+#              #
+#                                                 #+#   #+#   #+#            #
+#    Created: 2022/09/14 14:03:09 by lfarias-          #+#    #+#             #
+#    Updated: 2026/04/17 by lfarias-                 ###    ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = fdf
+NAME = fdf_bonus
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -O3
+CFLAGS = -Wall -Wextra -Werror -O3 -I./mlx/include -I./libft/
 LIBFT_DIR = ./libft/
 MLX_DIR = ./mlx/
-LDFLAGS = -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
-SRC = 	main.c \
-		utils.c \
-		app.c \
-		app_input.c \
-		draw.c \
-		draw_utils.c \
-		map_draw.c \
-		map.c \
-		map_utils.c \
-		transformations.c \
-		math_utils.c \
-		render.c \
-		render2.c \
-		events.c \
-		menu.c
+LDFLAGS = -L$(LIBFT_DIR) -L$(MLX_DIR)/build -L$(MLX_DIR)/build/_deps/glfw-build/src -lft -lmlx42 -lglfw3 -lOpenGL -lpthread -lm -ldl -lX11
+
+SRC = 	bonus/main_bonus.c \
+		bonus/utils_bonus.c \
+		bonus/app_bonus.c \
+		bonus/app_input_bonus.c \
+		bonus/draw_bonus.c \
+		bonus/draw_utils_bonus.c \
+		bonus/map_draw_bonus.c \
+		bonus/map_bonus.c \
+		bonus/map_utils_bonus.c \
+		bonus/transformations_bonus.c \
+		bonus/transformations2_bonus.c \
+		bonus/math_utils_bonus.c \
+		bonus/render_bonus.c \
+		bonus/render2_bonus.c \
+		bonus/events_bonus.c \
+		bonus/events2_bonus.c \
+		bonus/mouse_events_bonus.c \
+		bonus/menu_bonus.c
 SRC_OBJ = $(SRC:.c=.o)
-BONUS_SRC =	main_bonus.c \
-		utils_bonus.c \
-		app_bonus.c \
-		app_input_bonus.c \
-		draw_bonus.c \
-		draw_utils_bonus.c \
-		map_draw_bonus.c \
-		map_bonus.c \
-		map_utils_bonus.c \
-		transformations_bonus.c \
-		transformations2_bonus.c \
-		math_utils_bonus.c \
-		render_bonus.c \
-		render2_bonus.c \
-		events_bonus.c \
-		events2_bonus.c \
-		mouse_events_bonus.c \
-		menu_bonus.c
-BONUS_DIR = ./bonus/
-BONUS_FILES = $(addprefix $(BONUS_DIR), $(BONUS_SRC))
-BONUS_OBJS = $(BONUS_FILES:.c=.o) 
-	
+
+all: $(NAME)
+
 $(NAME): $(SRC_OBJ)
 	make -C $(LIBFT_DIR) libft.a
 	make -C $(MLX_DIR) all
-	cp $(MLX_DIR)/libmlx.dylib .
-	$(CC) $(CFLAGS) $(SRC_OBJ) $(LDFLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(SRC_OBJ) -o $(NAME) $(LDFLAGS)
 
-all: $(NAME)
-	
 clean:
 	make -C $(LIBFT_DIR) clean
 	make -C $(MLX_DIR) clean
-	rm -f libmlx.dylib
 	rm -f $(SRC_OBJ)
 
 fclean: clean
@@ -73,12 +54,3 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
-
-bonus: $(BONUS_OBJS)
-	make -C $(LIBFT_DIR) libft.a
-	make -C $(MLX_DIR) all
-	cp $(MLX_DIR)/libmlx.dylib .
-	$(CC) $(CFLAGS) $(BONUS_FILES) $(LDFLAGS) -o $(NAME)
-
-bclean:
-	rm -rf $(BONUS_OBJS)

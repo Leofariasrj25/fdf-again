@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   events_bonus.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lfarias- <lfarias-@student.42.rio>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*   events_bonus.c                                     :::      ::::::::   */
+/*                                                    :::      ::::::::   */
+/*   By: lfarias- <lfarias-@student.42.rio>         :::   :::   :::        */
+/*                                                https://github.com/lfariasr */
+/*                                                    https://42.rio         */
 /*   Created: 2022/10/24 20:35:11 by lfarias-          #+#    #+#             */
-/*   Updated: 2022/11/05 14:50:19 by lfarias-         ###   ########.fr       */
+/*   Updated: 2026/04/17 by lfarias-                 ###    ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf_bonus.h"
-#include "../mlx/mlx.h"
 
-void	view_modes(int keycode, t_app *app_data);
-void	zscale_change(int keycode, t_app *app_data);
-void	xyscale_change(int keycode, t_app *app_data);
-void	rotate(int keycode, t_app *app_data);
+static void	view_modes(int keycode, t_app *app_data);
+static void	zscale_change(int keycode, t_app *app_data);
+static void	xyscale_change(int keycode, t_app *app_data);
+static void	rotate(int keycode, t_app *app_data);
 
-int	key_press(int keycode, void *param)
+void	key_handler(mlx_key_data_t keydata, void *param)
 {
 	t_app	*app_data;
+	int		keycode;
 
 	app_data = (t_app *) param;
+	keycode = keydata.key;
+	if (keydata.action != MLX_PRESS)
+		return ;
 	if (keycode == ESC_KEY)
 	{
 		all_you_need_is_kill(app_data);
@@ -43,10 +47,9 @@ int	key_press(int keycode, void *param)
 	else if (keycode == PALETTE_1 || keycode == PALETTE_2 \
 		|| keycode == PALETTE_3)
 		change_palette(keycode, app_data);
-	return (0);
 }
 
-void	view_modes(int keycode, t_app *app_data)
+static void	view_modes(int keycode, t_app *app_data)
 {
 	if (keycode == I_KEY)
 	{
@@ -61,7 +64,7 @@ void	view_modes(int keycode, t_app *app_data)
 	}
 }
 
-void	zscale_change(int keycode, t_app *app_data)
+static void	zscale_change(int keycode, t_app *app_data)
 {
 	if (keycode == J_KEY)
 		app_data->map->z_scale = app_data->map->z_scale + 0.2;
@@ -70,7 +73,7 @@ void	zscale_change(int keycode, t_app *app_data)
 	app_data->map_draw = 0;
 }
 
-void	xyscale_change(int keycode, t_app *app_data)
+static void	xyscale_change(int keycode, t_app *app_data)
 {
 	double	limit;
 
@@ -86,7 +89,7 @@ void	xyscale_change(int keycode, t_app *app_data)
 	app_data->map_draw = 0;
 }
 
-void	rotate(int keycode, t_app *app_data)
+static void	rotate(int keycode, t_app *app_data)
 {
 	if (keycode == ARROW_UP)
 		app_data->map->angles[X] = app_data->map->angles[X] - 1.2;

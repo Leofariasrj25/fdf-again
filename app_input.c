@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "mlx/mlx.h"
 
 double	get_scale(int map_width, int map_length, int argc, char **argv)
 {
@@ -58,12 +57,8 @@ int	check_input_size(int argc)
 
 void	all_you_need_is_kill(t_app *app_data)
 {
-	mlx_destroy_image(app_data->mlx, app_data->bitmap->img);
-	free(app_data->bitmap);
-	mlx_destroy_window(app_data->mlx, app_data->window);
-	app_data->window = NULL;
-	app_data->win_close = 1;
-	free(app_data->mlx);
+	mlx_delete_image(app_data->mlx, app_data->img);
+	mlx_terminate(app_data->mlx);
 	free(app_data->map->points);
 	free(app_data->projection);
 	free(app_data->map);

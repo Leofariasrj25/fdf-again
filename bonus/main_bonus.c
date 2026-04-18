@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_bonus.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lfarias- <lfarias-@student.42.rio>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*   main_bonus.c                                       :::      ::::::::   */
+/*                                                    :::      ::::::::   */
+/*   By: lfarias- <lfarias-@student.42.rio>         :::   :::   :::        */
+/*                                                https://github.com/lfariasr */
+/*                                                    https://42.rio         */
 /*   Created: 2022/09/11 14:40:12 by lfarias-          #+#    #+#             */
-/*   Updated: 2022/11/01 19:06:58 by lfarias-         ###   ########.fr       */
+/*   Updated: 2026/04/17 by lfarias-                 ###    ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf_bonus.h"
-#include "../mlx/mlx.h"
 #include <math.h>
 #include <unistd.h>
 

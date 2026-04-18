@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "mlx/mlx.h"
 #include <math.h>
 #include <unistd.h>
 

@@ -1,40 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   app.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lfarias- <lfarias-@student.42.rio>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*   app.c                                              :::      ::::::::   */
+/*                                                    :::      ::::::::   */
+/*   By: lfarias- <lfarias-@student.42.rio>         :::   :::   :::        */
+/*                                                https://github.com/lfariasr */
+/*                                                    https://42.rio         */
 /*   Created: 2022/10/24 20:42:00 by lfarias-          #+#    #+#             */
-/*   Updated: 2022/11/03 19:00:47 by lfarias-         ###   ########.fr       */
+/*   Updated: 2026/04/17 by lfarias-                 ###    ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "mlx/mlx.h" 
 
 void	app_run(t_app *data)
 {
-	mlx_hook(data->window, KEY_PRESS, 1L << 0, key_press, data);
-	mlx_hook(data->window, CLOSE_WIN, 1L << 17, close_button, data);
-	mlx_loop_hook(data->mlx, render_scene, data);
+	mlx_key_hook(data->mlx, key_handler, data);
+	mlx_close_hook(data->mlx, close_handler, data);
+	mlx_loop_hook(data->mlx, render_loop, data);
 	mlx_loop(data->mlx);
 }
 
 int	mlx_load(t_app *app_data)
 {
-	app_data->mlx = mlx_init();
-	app_data->window = mlx_new_window(app_data->mlx, \
-		SCREEN_W, \
-		SCREEN_L, \
-		"FdF - lfarias-");
-	app_data->win_close = 0;
-	app_data->bitmap = malloc(sizeof(t_frame));
-	app_data->bitmap->img = mlx_new_image(app_data->mlx, SCREEN_W, SCREEN_L);
-	app_data->bitmap->addr = mlx_get_data_addr(app_data->bitmap->img, \
-		&app_data->bitmap->bits_per_pixel, \
-		&app_data->bitmap->line_length, \
-		&app_data->bitmap->endian);
+	int	i;
+
+	app_data->mlx = mlx_init(SCREEN_W, SCREEN_L, "FdF - lfarias-", true);
+	if (!app_data->mlx)
+		return (1);
+	app_data->img = mlx_new_image(app_data->mlx, SCREEN_W, SCREEN_L);
+	if (!app_data->img)
+		return (1);
+	mlx_image_to_window(app_data->mlx, app_data->img, 0, 0);
+	i = 0;
+	while (i < 20)
+	{
+		app_data->str_img[i] = NULL;
+		i++;
+	}
+	app_data->str_count = 0;
+	app_data->map_draw = 0;
 	return (0);
 }
 

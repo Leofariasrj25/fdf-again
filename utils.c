@@ -1,22 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lfarias- <lfarias-@student.42.rio>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*   utils.c                                            :::      ::::::::   */
+/*                                                    :::      ::::::::   */
+/*   By: lfarias- <lfarias-@student.42.rio>         :::   :::   :::        */
+/*                                                https://github.com/lfariasr */
+/*                                                    https://42.rio         */
 /*   Created: 2022/10/13 17:37:46 by lfarias-          #+#    #+#             */
-/*   Updated: 2022/11/03 19:00:26 by lfarias-         ###   ########.fr       */
+/*   Updated: 2026/04/17 by lfarias-                 ###    ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "libft/libft.h"
-#include "mlx/mlx.h"
 
-void	print_str(t_app *data, t_coord *point, int color, char *str)
+void	print_str(t_app *data, double x, double y, int color, char *str)
 {
-	mlx_string_put(data->mlx, data->window, point->x, point->y, color, str);
+	mlx_image_t	*img;
+
+	(void)color;
+	img = mlx_put_string(data->mlx, str, (int32_t)x, (int32_t)y);
+	if (img && data->str_count < 20)
+	{
+		data->str_img[data->str_count] = img;
+		data->str_count++;
+	}
 }
 
 void	print_err_msg(char	*err_msg)

@@ -1,66 +1,53 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_bonus.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lfarias- <lfarias-@student.42.rio>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*   render_bonus.c                                     :::      ::::::::   */
+/*                                                    :::      :::     */
+/*   By: lfarias- <lfarias-@student.42.rio>         :::   :::   :::        */
+/*                                                https://github.com/lfariasr */
+/*                                                    https://42.rio         */
 /*   Created: 2022/10/13 16:43:25 by lfarias-          #+#    #+#             */
-/*   Updated: 2022/11/03 18:50:20 by lfarias-         ###   ########.fr       */
+/*   Updated: 2026/04/18 by lfarias-                 ###    ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf_bonus.h"
-#include "../mlx/mlx.h"
 
-t_frame	*get_new_img(t_app *app_data);
-
-int	render_scene(t_app *app_data)
+void	render_loop(void *param)
 {
-	t_frame	*screen;
+	t_app	*app;
+	int32_t	mx;
+	int32_t	my;
 
-	if (app_data->projection == NULL)
-		app_data->projection = malloc(sizeof(t_coord) * app_data->map->size);
-	if (!app_data->win_close && !app_data->map_draw)
+	app = (t_app *)param;
+	if (app->map_draw)
 	{
-		screen = get_new_img(app_data);
-		if (!app_data->map_draw)
+		if (mlx_is_mouse_down(app->mlx, MLX_MOUSE_BUTTON_RIGHT))
 		{
-			copy_points(app_data->projection, app_data->map->points, \
-				app_data->map->size);
-			render_img(app_data, app_data->projection);
+			mlx_get_mouse_pos(app->mlx, &mx, &my);
+			app->map->source.x = mx - app->offset_px;
+			app->map->source.y = my - app->offset_py;
+			display_img(app);
 		}
-		if (app_data->fit)
-		{
-			fit_img(app_data, app_data->projection);
-			app_data->fit = 0;
-		}
-		display_img(app_data);
-		app_data->map_draw = 1;
-		free_img_buffer(app_data, screen);
-	}
-	return (0);
-}
-
-t_frame	*get_new_img(t_app *app_data)
-{
-	t_frame	*screen;
-
-	screen = NULL;
-	if (!app_data->map_draw)
-	{
-		screen = app_data->bitmap;
-		app_data->bitmap = malloc(sizeof(t_frame));
-		app_data->bitmap->img = mlx_new_image(app_data->mlx, \
-			SCREEN_W, SCREEN_L);
-		app_data->bitmap->addr = mlx_get_data_addr(app_data->bitmap->img, \
-			&app_data->bitmap->bits_per_pixel, \
-			&app_data->bitmap->line_length, \
-			&app_data->bitmap->endian);
-		return (screen);
 	}
 	else
-		return (screen);
+	{
+		if (!app->map || !app->map->points)
+			return ;
+		if (app->projection == NULL)
+			app->projection = malloc(sizeof(t_coord) * app->map->size);
+		if (!app->projection)
+			return ;
+		copy_points(app->projection, app->map->points, app->map->size);
+		render_img(app, app->projection);
+		if (app->fit)
+		{
+			fit_img(app, app->projection);
+			app->fit = 0;
+		}
+		display_img(app);
+		app->map_draw = 1;
+	}
 }
 
 void	render_img(t_app *data, t_coord *projection)

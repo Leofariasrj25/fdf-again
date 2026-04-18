@@ -1,16 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_draw.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lfarias- <lfarias-@student.42.rio>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*   map_draw.c                                         :::      ::::::::   */
+/*                                                    :::      ::::::::   */
+/*   By: lfarias- <lfarias-@student.42.rio>         :::   :::   :::        */
+/*                                                https://github.com/lfariasr */
+/*                                                    https://42.rio         */
 /*   Created: 2022/10/21 20:21:10 by lfarias-          #+#    #+#             */
-/*   Updated: 2022/11/03 20:04:14 by lfarias-         ###   ########.fr       */
+/*   Updated: 2026/04/17 by lfarias-                 ###    ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include <stdint.h>
+
+static int	convert_color(int color);
+
+static int	convert_color(int color)
+{
+	uint8_t	r;
+	uint8_t	g;
+	uint8_t	b;
+	uint8_t	a;
+
+	r = (color >> 16) & 0xFF;
+	g = (color >> 8) & 0xFF;
+	b = color & 0xFF;
+	a = (color >> 24) & 0xFF;
+	if (a == 0)
+		a = 0xFF;
+	return ((r << 24) | (g << 16) | (b << 8) | a);
+}
 
 int		color_pick(t_app *app, t_coord *p0, t_coord *p1);
 void	draw_last_line(t_app *data, t_coord *projection);
@@ -30,11 +50,13 @@ void	draw_map(t_app *data, t_coord *projection)
 		{
 			color = color_pick(data, &data->map->points[i], \
 				&data->map->points[i + 1]);
-			draw_line(data->bitmap, &projection[i], \
+			color = convert_color(color);
+			draw_line(data->img, &projection[i], \
 					&projection[i + 1], color);
 			color = color_pick(data, &projection[i], \
 				&projection[i + data->map->width]);
-			draw_line(data->bitmap, &projection[i], \
+			color = convert_color(color);
+			draw_line(data->img, &projection[i], \
 				&projection[i + data->map->width], color);
 		}
 		else
@@ -72,7 +94,8 @@ void	draw_last_line(t_app *data, t_coord *projection)
 	{
 		color = color_pick(data, &data->map->points[i], \
 				&data->map->points[i + 1]);
-		draw_line(data->bitmap, &projection[i], &projection[i + 1], color);
+		color = convert_color(color);
+		draw_line(data->img, &projection[i], &projection[i + 1], color);
 		i++;
 	}
 }
@@ -87,7 +110,8 @@ void	draw_last_col(t_app *data, t_coord *projection)
 	{
 		color = color_pick(data, &data->map->points[i], \
 			&data->map->points[i + data->map->width]);
-		draw_line(data->bitmap, &projection[i], \
+		color = convert_color(color);
+		draw_line(data->img, &projection[i], \
 			&projection[i + data->map->width], color);
 		i += data->map->width;
 	}

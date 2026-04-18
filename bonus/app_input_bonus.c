@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   app_input_bonus.c                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lfarias- <lfarias-@student.42.rio>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*   app_input_bonus.c                                  :::      ::::::::   */
+/*                                                    :::      ::::::::   */
+/*   By: lfarias- <lfarias-@student.42.rio>         :::   :::   :::        */
+/*                                                https://github.com/lfariasr */
+/*                                                    https://42.rio         */
 /*   Created: 2022/10/24 20:36:22 by lfarias-          #+#    #+#             */
-/*   Updated: 2022/11/03 18:07:47 by lfarias-         ###   ########.fr       */
+/*   Updated: 2026/04/17 by lfarias-                 ###    ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf_bonus.h"
-#include "../mlx/mlx.h"
 
 double	get_scale(int map_width, int map_length, int argc, char **argv)
 {
@@ -58,13 +58,22 @@ int	check_input_size(int argc)
 
 void	all_you_need_is_kill(t_app *app_data)
 {
-	mlx_destroy_image(app_data->mlx, app_data->bitmap->img);
-	free(app_data->bitmap);
-	mlx_destroy_window(app_data->mlx, app_data->window);
-	app_data->window = NULL;
-	app_data->win_close = 1;
-	free(app_data->mlx);
+	int	i;
+
+	i = 0;
+	while (i < app_data->str_count)
+	{
+		if (app_data->str_img[i])
+		{
+			mlx_delete_image(app_data->mlx, app_data->str_img[i]);
+			app_data->str_img[i] = NULL;
+		}
+		i++;
+	}
+	mlx_delete_image(app_data->mlx, app_data->img);
+	mlx_terminate(app_data->mlx);
 	free(app_data->map->points);
-	free(app_data->projection);
+	if (app_data->projection)
+		free(app_data->projection);
 	free(app_data->map);
 }

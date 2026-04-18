@@ -1,73 +1,74 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   events.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lfarias- <lfarias-@student.42.rio>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*   events.c                                           :::      ::::::::   */
+/*                                                    :::      ::::::::   */
+/*   By: lfarias- <lfarias-@student.42.rio>         :::   :::   :::        */
+/*                                                https://github.com/lfariasr */
+/*                                                    https://42.rio         */
 /*   Created: 2022/10/24 20:35:11 by lfarias-          #+#    #+#             */
-/*   Updated: 2022/11/03 19:20:00 by lfarias-         ###   ########.fr       */
+/*   Updated: 2026/04/17 by lfarias-                 ###    ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "mlx/mlx.h"
 
-void	zscale_change(int keycode, t_app *app_data);
-void	xyscale_change(int keycode, t_app *app_data);
+static void	zscale_change(int keycode, t_app *app_data);
+static void	xyscale_change(int keycode, t_app *app_data);
 
-int	key_press(int keycode, void *param)
+void	key_handler(mlx_key_data_t keydata, void *param)
 {
-	t_app	*app_data;
+	t_app	*app;
 
-	app_data = (t_app *) param;
-	if (keycode == F_KEY)
+	app = (t_app *)param;
+	if (keydata.key == MLX_KEY_F && keydata.action == MLX_PRESS)
 	{
-		app_data->fit = 1;
-		app_data->map_draw = 0;
+		app->fit = 1;
+		app->map_draw = 0;
 	}
-	if (keycode == J_KEY || keycode == K_KEY)
-		zscale_change(keycode, app_data);
-	if (keycode == H_KEY || keycode == L_KEY)
-		xyscale_change(keycode, app_data);
-	if (keycode == ESC_KEY)
+	if ((keydata.key == MLX_KEY_J || keydata.key == MLX_KEY_K) \
+		&& keydata.action == MLX_PRESS)
+		zscale_change(keydata.key, app);
+	if ((keydata.key == MLX_KEY_H || keydata.key == MLX_KEY_L) \
+		&& keydata.action == MLX_PRESS)
+		xyscale_change(keydata.key, app);
+	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 	{
-		all_you_need_is_kill(app_data);
+		all_you_need_is_kill(app);
 		exit(0);
 	}
-	return (0);
 }
 
-int	close_button(void *param)
+void	close_handler(void *param)
 {
-	t_app	*app_data;
+	t_app	*app;
 
-	app_data = (t_app *) param;
-	all_you_need_is_kill(app_data);
+	app = (t_app *)param;
+	all_you_need_is_kill(app);
 	exit(0);
 }
 
-void	zscale_change(int keycode, t_app *app_data)
+static void	zscale_change(int keycode, t_app *app_data)
 {
-	if (keycode == J_KEY)
+	if (keycode == MLX_KEY_J)
 		app_data->map->z_scale = app_data->map->z_scale + 0.2;
-	else if (keycode == K_KEY)
+	else if (keycode == MLX_KEY_K)
 		app_data->map->z_scale = app_data->map->z_scale - 0.2;
 	app_data->map_draw = 0;
 }
 
-void	xyscale_change(int keycode, t_app *app_data)
+static void	xyscale_change(int keycode, t_app *app_data)
 {
 	double	limit;
 
 	limit = 0.0;
-	if (keycode == H_KEY)
+	if (keycode == MLX_KEY_H)
 	{
 		limit = app_data->map->scale - 0.5;
 		if (limit >= 0.0)
 			app_data->map->scale = limit;
 	}
-	else if (keycode == L_KEY)
+	else if (keycode == MLX_KEY_L)
 		app_data->map->scale = app_data->map->scale + 0.5;
 	app_data->map_draw = 0;
 }
