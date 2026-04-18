@@ -54,3 +54,13 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+test: tests/test_input tests/test_map
+	./tests/test_input
+	./tests/test_map
+
+tests/test_input: tests/test_input.c
+	cc -Wall -Wextra -Werror tests/test_input.c -o tests/test_input
+
+tests/test_map: tests/test_map.c
+	cc -Wall -Wextra -Werror tests/test_map.c -o tests/test_map
