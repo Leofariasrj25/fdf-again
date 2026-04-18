@@ -55,12 +55,16 @@ fclean: clean
 
 re: fclean all
 
-test: tests/test_input tests/test_map
+test: tests/test_input tests/test_map tests/test_color
 	./tests/test_input
 	./tests/test_map
+	./tests/test_color
 
 tests/test_input: tests/test_input.c
 	cc -Wall -Wextra -Werror tests/test_input.c -o tests/test_input
 
 tests/test_map: tests/test_map.c
 	cc -Wall -Wextra -Werror tests/test_map.c -o tests/test_map
+
+tests/test_color: tests/test_color.c
+	cc -Wall -Wextra -Werror tests/test_color.c -o tests/test_color
